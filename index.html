@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz Cumpleaños Papá</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #0d0d0d;
+      font-family: 'Courier New', monospace;
+      color: white;
+    }
+    canvas {
+      display: block;
+    }
+    #mensaje {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 18px;
+      z-index: 10;
+      max-width: 400px;
+    }
+    #mensaje h1 {
+      margin: 0 0 10px;
+      color: #ff9999;
+    }
+    #mensaje p {
+      margin: 4px 0;
+    }
+    #foto {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 280px;
+      border-radius: 20px;
+      box-shadow: 0 0 18px white;
+    }
+  </style>
+</head>
+<body>
+  <div id="mensaje">
+    <h1>Te amo papá ❤️</h1>
+    <p>¡Feliz cumpleaños!</p>
+    <p>Gracias por ser mi héroe, mi ejemplo, el mejor programador del universo y el papá más increíble que existe.</p>
+    <p>Cuando sea grande quiero ser como tú, y siempre voy a estar agradecida por lo que me has enseñado, por todo lo que me has brindado y por cómo me haces sentir protegida y amada.</p>
+  </div>
+  <img id="foto" src="papayyo.jpg" alt="Foto con papá">
+  <canvas id="canvas"></canvas>
+  <audio autoplay loop>
+    <source src="cancioncita.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const points = [];
+    let frame = 0;
+
+    function heartFunction(t) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+      return { x: x * 10, y: -y * 10 };
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(13,13,13,0.15)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const t = frame * 0.05;
+      const pos = heartFunction(t);
+      points.push({ x: cx + pos.x, y: cy + pos.y, size: 2 + Math.sin(t * 2) });
+
+      for (let p of points) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff4d4d';
+        ctx.fill();
+      }
+
+      // Más corazones girando
+      for (let i = 0; i < 20; i++) {
+        const a = frame * 0.02 + i * Math.PI / 10;
+        const r = 140 + 20 * Math.sin(i + frame * 0.01);
+        const x = cx + r * Math.cos(a);
+        const y = cy + r * Math.sin(a);
+        ctx.beginPath();
+        ctx.arc(x, y, 5 + Math.sin(frame * 0.05 + i), 0, Math.PI * 2);
+        ctx.fillStyle = i % 2 === 0 ? '#ffcccc' : '#ff99cc';
+        ctx.fill();
+      }
+
+      // Código de programación
+      ctx.font = "bold 24px Courier New";
+      ctx.fillStyle = "#00ffcc";
+      ctx.fillText("function papáFeliz() {", 30, canvas.height - 100);
+      ctx.fillText("  return '¡Te amo, papá!';", 30, canvas.height - 70);
+      ctx.fillText("}", 30, canvas.height - 40);
+
+      // Superpapá héroe
+      ctx.font = "bold 42px Arial";
+      ctx.fillStyle = "#00ccff";
+      ctx.fillText("<superpapá />", cx - 150, 70);
+
+      frame++;
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
